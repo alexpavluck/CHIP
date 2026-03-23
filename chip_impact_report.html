@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHIP Impact Assessment Survey — Results Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --blue: #1a6fba;
+    --blue-light: #2e86de;
+    --blue-pale: #e8f2fc;
+    --teal: #17a589;
+    --teal-light: #a3e4d7;
+    --amber: #f39c12;
+    --amber-light: #fef9e7;
+    --red: #c0392b;
+    --red-light: #fadbd8;
+    --purple: #7d3c98;
+    --purple-light: #e8daef;
+    --gray-dark: #2c3e50;
+    --gray-mid: #5d6d7e;
+    --gray-light: #f0f3f6;
+    --gray-border: #d5dbdb;
+    --white: #ffffff;
+    --card-radius: 12px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f4f6f9;
+    color: var(--gray-dark);
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .report-header {
+    background: linear-gradient(135deg, #1a3c6e 0%, #1a6fba 60%, #17a589 100%);
+    color: white;
+    padding: 52px 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .report-header::before {
+    content: '';
+    position: absolute;
+    top: -80px; right: -80px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .report-header::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 10px;
+  }
+  .report-header h1 {
+    font-size: 36px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .report-header .subtitle {
+    font-size: 16px;
+    opacity: 0.85;
+    max-width: 600px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .header-meta-item {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 13px;
+    backdrop-filter: blur(4px);
+  }
+  .header-meta-item strong { display: block; font-size: 18px; margin-bottom: 2px; }
+
+  /* ── NAV ── */
+  .nav-bar {
+    background: white;
+    border-bottom: 1px solid var(--gray-border);
+    padding: 0 48px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .nav-bar a {
+    padding: 14px 18px;
+    text-decoration: none;
+    color: var(--gray-mid);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+  }
+  .nav-bar a:hover { color: var(--blue); border-bottom-color: var(--blue-light); }
+
+  /* ── MAIN LAYOUT ── */
+  .container { max-width: 1200px; margin: 0 auto; padding: 36px 24px; }
+
+  /* ── SECTION ── */
+  .section { margin-bottom: 52px; }
+  .section-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-dark);
+    margin-bottom: 6px;
+    padding-left: 14px;
+    border-left: 4px solid var(--blue);
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--gray-mid);
+    margin-bottom: 24px;
+    padding-left: 18px;
+  }
+
+  /* ── KPI STRIP ── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi-card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--blue);
+  }
+  .kpi-card.teal { border-top-color: var(--teal); }
+  .kpi-card.amber { border-top-color: var(--amber); }
+  .kpi-card.purple { border-top-color: var(--purple); }
+  .kpi-card.red { border-top-color: var(--red); }
+  .kpi-number {
+    font-size: 44px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .kpi-card.teal .kpi-number { color: var(--teal); }
+  .kpi-card.amber .kpi-number { color: var(--amber); }
+  .kpi-card.purple .kpi-number { color: var(--purple); }
+  .kpi-card.red .kpi-number { color: var(--red); }
+  .kpi-label { font-size: 13px; color: var(--gray-mid); font-weight: 500; }
+
+  /* ── CARD ── */
+  .card {
+    background: white;
+    border-radius: var(--card-radius);
+    padding: 28px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+  }
+  .card h3 {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--gray-dark);
+  }
+
+  /* ── GRID LAYOUTS ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) {
+    .two-col, .three-col { grid-template-columns: 1fr; }
+    .report-header { padding: 36px 24px 28px; }
+    .nav-bar { padding: 0 16px; }
+    .container { padding: 24px 16px; }
+  }
+
+  /* ── CHART CONTAINERS ── */
+  .chart-wrap { position: relative; height: 220px; }
+  .chart-wrap.tall { height: 280px; }
+  .chart-wrap.short { height: 170px; }
+
+  /* ── HORIZONTAL BAR ROWS ── */
+  .hbar-list { display: flex; flex-direction: column; gap: 10px; }
+  .hbar-item { display: flex; flex-direction: column; gap: 4px; }
+  .hbar-label { font-size: 12px; color: var(--gray-mid); font-weight: 500; }
+  .hbar-row { display: flex; align-items: center; gap: 8px; }
+  .hbar-track { flex: 1; background: var(--gray-light); border-radius: 4px; height: 10px; overflow: hidden; }
+  .hbar-fill { height: 100%; border-radius: 4px; background: var(--blue); transition: width 0.6s ease; }
+  .hbar-val { font-size: 12px; font-weight: 700; color: var(--gray-dark); min-width: 28px; text-align: right; }
+
+  /* ── LIKERT GRID ── */
+  .likert-table { width: 100%; border-collapse: collapse; }
+  .likert-table th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--gray-mid);
+    padding: 8px 12px;
+    border-bottom: 2px solid var(--gray-border);
+    text-align: left;
+  }
+  .likert-table td { padding: 10px 12px; border-bottom: 1px solid var(--gray-border); font-size: 13px; vertical-align: middle; }
+  .likert-table tr:last-child td { border-bottom: none; }
+  .likert-table tr:nth-child(even) td { background: var(--gray-light); }
+  .score-bar-cell { width: 220px; }
+  .score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+  .score-track { flex: 1; background: var(--gray-border); border-radius: 4px; height: 8px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 4px; }
+  .score-val { font-weight: 700; min-width: 30px; }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout.green { background: #e9f7ef; border-left: 4px solid var(--teal); }
+  .callout.blue { background: var(--blue-pale); border-left: 4px solid var(--blue); }
+  .callout.amber { background: var(--amber-light); border-left: 4px solid var(--amber); }
+  .callout.red { background: var(--red-light); border-left: 4px solid var(--red); }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-text { font-size: 14px; line-height: 1.5; }
+  .callout-text strong { display: block; font-size: 15px; margin-bottom: 3px; }
+
+  /* ── QUOTE CARDS ── */
+  .quote-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .quote-card {
+    background: var(--blue-pale);
+    border-radius: 10px;
+    padding: 18px 20px;
+    border-left: 3px solid var(--blue-light);
+    font-size: 13px;
+    font-style: italic;
+    color: var(--gray-dark);
+    line-height: 1.6;
+    position: relative;
+  }
+  .quote-card::before { content: '"'; font-size: 48px; color: var(--blue-light); opacity: 0.3; position: absolute; top: 4px; left: 12px; font-style: normal; line-height: 1; }
+  .quote-card p { padding-left: 12px; }
+  .quote-meta { font-size: 11px; color: var(--gray-mid); font-style: normal; margin-top: 8px; padding-left: 12px; font-weight: 600; }
+
+  /* ── PILL TAGS ── */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .pill {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--blue-pale);
+    color: var(--blue);
+  }
+  .pill.teal { background: var(--teal-light); color: #0e6655; }
+  .pill.amber { background: var(--amber-light); color: #7d6608; }
+  .pill.red { background: var(--red-light); color: var(--red); }
+
+  /* ── SECTION DIVIDER ── */
+  .divider { height: 1px; background: var(--gray-border); margin: 40px 0; }
+
+  /* ── FOOTER ── */
+  .report-footer {
+    background: var(--gray-dark);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 28px;
+    font-size: 13px;
+  }
+  .report-footer strong { color: white; }
+
+  /* ── AWARENESS SPLIT ── */
+  .awareness-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .split-box {
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+  .split-box.yes { background: #e9f7ef; }
+  .split-box.no { background: #fef9e7; }
+  .split-num { font-size: 52px; font-weight: 900; line-height: 1; }
+  .split-box.yes .split-num { color: var(--teal); }
+  .split-box.no .split-num { color: var(--amber); }
+  .split-label { font-size: 14px; font-weight: 600; margin-top: 4px; }
+  .split-box.yes .split-label { color: #0e6655; }
+  .split-box.no .split-label { color: #7d6608; }
+  .split-sub { font-size: 12px; color: var(--gray-mid); margin-top: 4px; }
+
+  /* ── FEATURE TAG BAR ── */
+  .feature-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-border);
+    gap: 12px;
+  }
+  .feature-row:last-child { border-bottom: none; }
+  .feature-name { font-size: 13px; flex: 1; }
+  .feature-count {
+    background: var(--blue-pale);
+    color: var(--blue);
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .feature-bar { width: 120px; height: 8px; background: var(--gray-light); border-radius: 4px; overflow: hidden; }
+  .feature-bar-fill { height: 100%; background: var(--blue-light); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="report-header">
+  <div class="header-label">Internal Report · March 2026</div>
+  <h1>CHIP Impact Assessment<br>Survey Results</h1>
+  <p class="subtitle">Country Health Information Platform — User Perception & Programme Impact Evaluation</p>
+  <div class="header-meta">
+    <div class="header-meta-item"><strong>9</strong>Respondents</div>
+    <div class="header-meta-item"><strong>3–4 Days</strong>Collection window</div>
+    <div class="header-meta-item"><strong>47</strong>Questions across 9 sections</div>
+    <div class="header-meta-item"><strong>NTD Programme</strong>Focus area</div>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav-bar">
+  <a href="#summary">Summary</a>
+  <a href="#who">Who Responded</a>
+  <a href="#awareness">Awareness & Access</a>
+  <a href="#usage">Usage Patterns</a>
+  <a href="#impact">Perceived Impact</a>
+  <a href="#quality">Data Quality</a>
+  <a href="#barriers">Barriers</a>
+  <a href="#requests">Feature Requests</a>
+  <a href="#overall">Overall Rating</a>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<div class="container">
+
+  <!-- ── KEY FINDINGS SUMMARY ── -->
+  <div class="section" id="summary">
+    <div class="section-title">Key Findings at a Glance</div>
+    <div class="section-subtitle">The most important signals from 9 NTD programme respondents</div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-number">9</div>
+        <div class="kpi-label">Total respondents</div>
+      </div>
+      <div class="kpi-card teal">
+        <div class="kpi-number">67%</div>
+        <div class="kpi-label">Were aware of CHIP before this survey</div>
+      </div>
+      <div class="kpi-card amber">
+        <div class="kpi-number">33%</div>
+        <div class="kpi-label">Had never used CHIP</div>
+      </div>
+      <div class="kpi-card purple">
+        <div class="kpi-number">67%</div>
+        <div class="kpi-label">Would definitely recommend CHIP</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-number">56%</div>
+        <div class="kpi-label">Rate CHIP as "very valuable"</div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-icon">✅</div>
+      <div class="callout-text">
+        <strong>Strongest signal: CHIP is seen as uniquely valuable</strong>
+        5 of 9 respondents rate CHIP as "Very valuable — significantly improves our work." All 3 non-users rated it neutrally or poorly, suggesting the gap is in <em>onboarding</em>, not the product itself.
+      </div>
+    </div>
+    <div class="callout amber">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-text">
+        <strong>Top barrier: data is not up to date</strong>
+        Stale data was the #1 challenge cited by CHIP users, and the data delay was rated a "major barrier" by 2 respondents. This was the most consistent complaint across the survey.
+      </div>
+    </div>
+    <div class="callout blue">
+      <div class="callout-icon">🔗</div>
+      <div class="callout-text">
+        <strong>HMIS integration is the #1 feature request</strong>
+        8 of 9 respondents want integration with their national HMIS (e.g. DHIS2). This appeared across all user segments — both CHIP users and non-users.
+      </div>
+    </div>
+    <div class="callout red">
+      <div class="callout-icon">🎓</div>
+      <div class="callout-text">
+        <strong>Training gaps drive non-adoption</strong>
+        All 3 non-users cited lack of training. Even among CHIP users, only 2 of 6 received comprehensive training — the rest had brief orientations or nothing at all.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── WHO RESPONDED ── -->
+  <div class="section" id="who">
+    <div class="section-title">Who Responded</div>
+    <div class="section-subtitle">Demographics and professional background of survey participants</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Primary Role (A1)</h3>
+        <div class="chart-wrap">
+          <canvas id="roleChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Years in NTD Programmes (A2)</h3>
+        <div class="chart-wrap">
+          <canvas id="yearsChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>PC-NTDs Addressed by Programme (A3) — Multiple select, n=9</h3>
+      <div class="hbar-list">
+        <div class="hbar-item">
+          <div class="hbar-label">Lymphatic Filariasis (LF)</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:88.9%; background:#1a6fba;"></div></div>
+            <div class="hbar-val">8/9</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Schistosomiasis</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:88.9%; background:#1a6fba;"></div></div>
+            <div class="hbar-val">8/9</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Onchocerciasis</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:77.8%; background:#2e86de;"></div></div>
+            <div class="hbar-val">7/9</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Soil-transmitted Helminthiases (STH)</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:77.8%; background:#2e86de;"></div></div>
+            <div class="hbar-val">7/9</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Trachoma</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:55.6%; background:#17a589;"></div></div>
+            <div class="hbar-val">5/9</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">WASH</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:44.4%; background:#7d3c98;"></div></div>
+            <div class="hbar-val">4/9</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── AWARENESS & ONBOARDING ── -->
+  <div class="section" id="awareness">
+    <div class="section-title">Awareness &amp; Onboarding</div>
+    <div class="section-subtitle">How respondents learned about CHIP, and their training experience</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Prior awareness of CHIP (B1)</h3>
+        <div class="awareness-split">
+          <div class="split-box yes">
+            <div class="split-num">6</div>
+            <div class="split-label">Were aware of CHIP</div>
+            <div class="split-sub">67% of respondents</div>
+          </div>
+          <div class="split-box no">
+            <div class="split-num">3</div>
+            <div class="split-label">Not aware before survey</div>
+            <div class="split-sub">All cited lack of training</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Training received on CHIP (B3) — among CHIP-aware users</h3>
+        <div class="chart-wrap">
+          <canvas id="trainingChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How respondents first learned about CHIP (B2) — among 6 CHIP-aware users</h3>
+      <div class="hbar-list">
+        <div class="hbar-item">
+          <div class="hbar-label">WHO/ESPEN Training or Workshop</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:50%; background:#1a6fba;"></div></div>
+            <div class="hbar-val">3/6</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Conference or Meeting</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:16.7%; background:#2e86de;"></div></div>
+            <div class="hbar-val">1/6</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">NGO Partner Introduction</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:16.7%; background:#17a589;"></div></div>
+            <div class="hbar-val">1/6</div>
+          </div>
+        </div>
+        <div class="hbar-item">
+          <div class="hbar-label">Colleague or Peer Recommendation</div>
+          <div class="hbar-row">
+            <div class="hbar-track"><div class="hbar-fill" style="width:16.7%; background:#7d3c98;"></div></div>
+            <div class="hbar-val">1/6</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--gray-border);">
+        <p style="font-size:13px; color:var(--gray-mid);"><strong style="color:var(--gray-dark);">Insight:</strong> WHO/ESPEN training is the dominant discovery channel. Peer recommendation and partner introductions are emerging paths — suggesting word-of-mouth is organic but present.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── USAGE PATTERNS ── -->
+  <div class="section" id="usage">
+    <div class="section-title">Usage Patterns</div>
+    <div class="section-subtitle">How frequently CHIP is accessed and what it's used for (among 6 CHIP-aware users)</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Access frequency (C1) — n=6 CHIP users</h3>
+        <div class="chart-wrap">
+          <canvas id="frequencyChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Primary purposes (C2) — multiple select</h3>
+        <div class="hbar-list" style="margin-top:8px;">
+          <div class="hbar-item">
+            <div class="hbar-label">Analysing disease endemicity/mapping</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:66.7%;"></div></div>
+              <div class="hbar-val">4/6</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Preparing presentations for stakeholders</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:66.7%;"></div></div>
+              <div class="hbar-val">4/6</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Reviewing treatment coverage data</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:50%;"></div></div>
+              <div class="hbar-val">3/6</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Planning MDA campaigns</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:50%;"></div></div>
+              <div class="hbar-val">3/6</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Assessing impact survey eligibility</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:33.3%; background:#17a589;"></div></div>
+              <div class="hbar-val">2/6</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Monitoring progress toward elimination</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:16.7%; background:#7d3c98;"></div></div>
+              <div class="hbar-val">1/6</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Most useful CHIP features (C3) — select up to 3, among 6 CHIP users</h3>
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div class="feature-row">
+          <span class="feature-name">🗺️ Interactive maps</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:66.7%;"></div></div>
+          <span class="feature-count">4 of 6</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🌍 Country-level co-endemicity review</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:66.7%;"></div></div>
+          <span class="feature-count">4 of 6</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">📊 MDA rounds &amp; coverage data tables</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:66.7%;"></div></div>
+          <span class="feature-count">4 of 6</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🔍 Cross-border multi-dashboard views</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:33.3%;"></div></div>
+          <span class="feature-count">2 of 6</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🔧 Regional &amp; interactive filters</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:16.7%;"></div></div>
+          <span class="feature-count">1 of 6</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">💧 WASH model data</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:16.7%;"></div></div>
+          <span class="feature-count">1 of 6</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PERCEIVED IMPACT ── -->
+  <div class="section" id="impact">
+    <div class="section-title">Perceived Programme Impact</div>
+    <div class="section-subtitle">Likert-scale agreement ratings from 6 CHIP-aware users (1=Strongly Disagree → 5=Strongly Agree)</div>
+
+    <div class="callout blue">
+      <div class="callout-icon">📌</div>
+      <div class="callout-text">
+        <strong>Context note</strong>
+        Scores are calculated only among the 6 respondents who were already aware of and using CHIP. The 3 non-users left these sections blank and are excluded from averages.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Programme Decision-Making &amp; Efficiency Impact</h3>
+      <div class="chart-wrap tall">
+        <canvas id="impactChart"></canvas>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3>Agreement scores — detailed view</h3>
+      <table class="likert-table">
+        <thead>
+          <tr>
+            <th>Statement</th>
+            <th>Avg Score</th>
+            <th class="score-bar-cell">Distribution</th>
+          </tr>
+        </thead>
+        <tbody id="likertTableBody">
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top: 16px;">
+      <div class="quote-grid">
+        <div class="quote-card">
+          <p>Provided information on when TAS was due in my country and the EUs — directly informing our programme timeline.</p>
+          <div class="quote-meta">— National NTD Programme Manager, 10+ years</div>
+        </div>
+        <div class="quote-card">
+          <p>It's a one stop shop for NTD Program visualization. Can't wait for improvements!</p>
+          <div class="quote-meta">— National NTD Programme Manager, 10+ years</div>
+        </div>
+        <div class="quote-card">
+          <p>It has enabled identifying the need to cover a zone that needed attention.</p>
+          <div class="quote-meta">— Assistant Technique, 1–3 years</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── DATA QUALITY ── -->
+  <div class="section" id="quality">
+    <div class="section-title">Data Quality &amp; Reporting Effects</div>
+    <div class="section-subtitle">CHIP's influence on data quality motivation and JAP reporting completeness</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Data quality Likert scores (avg out of 5) — n=6</h3>
+        <div class="chart-wrap tall">
+          <canvas id="qualityChart"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Changes to JAP reporting since using CHIP (E1) — n=6</h3>
+        <div class="chart-wrap">
+          <canvas id="japChart"></canvas>
+        </div>
+        <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--gray-border);">
+          <p style="font-size: 13px; color: var(--gray-mid);">
+            <strong style="color: var(--gray-dark);">Timeliness of JAP submissions (E3):</strong><br>
+            5 of 6 CHIP users saw no change in timeliness. 1 respondent noted submissions became <em>less</em> timely — suggesting data quality awareness can reveal gaps but doesn't automatically improve submission rates.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-icon">📈</div>
+      <div class="callout-text">
+        <strong>Key insight: visibility motivates quality</strong>
+        "Knowing data will be visible in CHIP encourages more complete reporting" scored the highest of all data quality statements (avg 4.2/5). The transparency effect of CHIP is its strongest quality lever.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BARRIERS ── -->
+  <div class="section" id="barriers">
+    <div class="section-title">Challenges &amp; Barriers</div>
+    <div class="section-subtitle">What's preventing more effective CHIP adoption and usage</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Challenges experienced (G1) — all 9 respondents</h3>
+        <div class="hbar-list">
+          <div class="hbar-item">
+            <div class="hbar-label">Data is not up to date</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:55.6%; background:#c0392b;"></div></div>
+              <div class="hbar-val">5/9</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Lack of training on the platform</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:33.3%; background:#f39c12;"></div></div>
+              <div class="hbar-val">3/9</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Cannot export data in needed formats</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:22.2%; background:#2e86de;"></div></div>
+              <div class="hbar-val">2/9</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Platform difficult to navigate</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:11.1%; background:#7d3c98;"></div></div>
+              <div class="hbar-val">1/9</div>
+            </div>
+          </div>
+          <div class="hbar-item">
+            <div class="hbar-label">Cannot access needed admin level data</div>
+            <div class="hbar-row">
+              <div class="hbar-track"><div class="hbar-fill" style="width:11.1%; background:#7d3c98;"></div></div>
+              <div class="hbar-val">1/9</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Data delay significance (G3) — n=6 CHIP users</h3>
+        <div class="chart-wrap">
+          <canvas id="delayChart"></canvas>
+        </div>
+        <div style="margin-top: 14px; font-size: 13px; color: var(--gray-mid); padding: 12px; background: var(--red-light); border-radius: 8px;">
+          <strong style="color: var(--red);">⚠️ 2 of 6 CHIP users</strong> rate the data delay as a <em>major barrier that significantly limits usefulness.</em> Only 1 considers it a minor issue.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Selected verbatim responses — biggest single barrier (G2)</h3>
+      <div class="quote-grid">
+        <div class="quote-card" style="background: #fef9e7; border-left-color: #f39c12;">
+          <p>Les données ne sont pas à jour <em>(Data is not up to date)</em></p>
+          <div class="quote-meta">— Assistant Technique</div>
+        </div>
+        <div class="quote-card" style="background: #fef9e7; border-left-color: #f39c12;">
+          <p>Takes too long to update the data on CHIP</p>
+          <div class="quote-meta">— National NTD Programme Manager</div>
+        </div>
+        <div class="quote-card" style="background: #fef9e7; border-left-color: #f39c12;">
+          <p>Lack of training on how to use the platform</p>
+          <div class="quote-meta">— Data Manager, Ministry of Health</div>
+        </div>
+        <div class="quote-card" style="background: #fef9e7; border-left-color: #f39c12;">
+          <p>L'obstacle majeur, c'est la formation sur la plateforme <em>(The main obstacle is training on the platform)</em></p>
+          <div class="quote-meta">— Assistant au Gestionnaire de données</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── FEATURE REQUESTS ── -->
+  <div class="section" id="requests">
+    <div class="section-title">Feature Requests &amp; Desired Improvements</div>
+    <div class="section-subtitle">What users want more of — showing remarkable alignment across all 9 respondents</div>
+
+    <div class="card">
+      <h3>Requested additional features (H1) — multiple select, all 9 respondents</h3>
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div class="feature-row">
+          <span class="feature-name">🔗 Integration with national HMIS (e.g. DHIS2)</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:88.9%; background:#c0392b;"></div></div>
+          <span class="feature-count" style="background:#fadbd8; color:#c0392b;">8 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🔄 More frequent data updates</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:66.7%; background:#f39c12;"></div></div>
+          <span class="feature-count" style="background:#fef9e7; color:#7d6608;">6 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🚚 NTDeliver supply chain / logistics data</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:55.6%;"></div></div>
+          <span class="feature-count">5 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🎛️ Customizable dashboards</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:55.6%;"></div></div>
+          <span class="feature-count">5 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">📱 Mobile-friendly interface</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:44.4%; background:#17a589;"></div></div>
+          <span class="feature-count" style="background:var(--teal-light); color:#0e6655;">4 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🔔 Notification alerts for data updates</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:44.4%; background:#17a589;"></div></div>
+          <span class="feature-count" style="background:var(--teal-light); color:#0e6655;">4 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">🔬 Additional disease indicators</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:33.3%; background:#7d3c98;"></div></div>
+          <span class="feature-count" style="background:#e8daef; color:#7d3c98;">3 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">📍 Sub-district level data</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:33.3%; background:#7d3c98;"></div></div>
+          <span class="feature-count" style="background:#e8daef; color:#7d3c98;">3 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">💧 Updated WASH model data</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:33.3%; background:#7d3c98;"></div></div>
+          <span class="feature-count" style="background:#e8daef; color:#7d3c98;">3 of 9</span>
+        </div>
+        <div class="feature-row">
+          <span class="feature-name">📴 Offline access capability</span>
+          <div class="feature-bar"><div class="feature-bar-fill" style="width:22.2%;"></div></div>
+          <span class="feature-count">2 of 9</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Selected verbatim improvement suggestions (H2)</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <p>Sub-district level data especially for SCH — this would make a significant difference in targeting.</p>
+          <div class="quote-meta">— National NTD Programme Manager</div>
+        </div>
+        <div class="quote-card">
+          <p>Si la mise à jour des données se fait de manière régulière et automatique, par exemple deux jours après la soumission du JAP. <em>(If data updates happened automatically, e.g. two days after JAP submission.)</em></p>
+          <div class="quote-meta">— National NTD Data Manager/M&E Officer</div>
+        </div>
+        <div class="quote-card">
+          <p>Appuyer la formation des membres des programmes MTN sur le CHIP, et faire une interopérabilité entre le SNIS, ESPEN et CHIP. <em>(Support training &amp; enable HMIS/ESPEN/CHIP interoperability.)</em></p>
+          <div class="quote-meta">— Assistant Gestionnaire de données</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── OVERALL RATING ── -->
+  <div class="section" id="overall">
+    <div class="section-title">Overall Rating &amp; Recommendation</div>
+    <div class="section-subtitle">Summary satisfaction and willingness to recommend CHIP</div>
+
+    <div class="two-col">
+      <div class="card">
+        <h3>Overall CHIP contribution rating (I1) — all 9 respondents</h3>
+        <div class="chart-wrap">
+          <canvas id="overallChart"></canvas>
+        </div>
+        <div style="margin-top:14px; padding:14px; background:var(--gray-light); border-radius:8px; font-size:13px; color:var(--gray-mid);">
+          <strong style="color:var(--gray-dark);">Key observation:</strong> Both "Not valuable" ratings came from respondents who had <em>never used CHIP</em>. Among actual users, every respondent rated it as at least "Moderately valuable."
+        </div>
+      </div>
+      <div class="card">
+        <h3>Would you recommend CHIP? (H3) — all 9 respondents</h3>
+        <div class="chart-wrap">
+          <canvas id="recommendChart"></canvas>
+        </div>
+        <div class="pill-row">
+          <span class="pill teal">6/9 "Yes, definitely"</span>
+          <span class="pill amber">3/9 Neutral (all non-users)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Closing reflections from respondents (I2 &amp; H4)</h3>
+      <div class="quote-grid">
+        <div class="quote-card">
+          <p>It's a one stop shop for NTD Program visualization — can't wait for improvements!</p>
+          <div class="quote-meta">— National NTD Programme Manager</div>
+        </div>
+        <div class="quote-card">
+          <p>L'utilisation du CHIP est très importante. <em>(CHIP is very important.)</em></p>
+          <div class="quote-meta">— National NTD Data Manager/M&E Officer</div>
+        </div>
+        <div class="quote-card">
+          <p>C'est une belle initiative d'évaluer la plateforme afin d'améliorer son appropriation par les pays. <em>(This is a great initiative to evaluate the platform and improve country ownership.)</em></p>
+          <div class="quote-meta">— Assistant Gestionnaire de données</div>
+        </div>
+        <div class="quote-card">
+          <p>Necesito una formación al respecto. No contamos con una base de datos sólida — me gustaría recibir formación sobre CHIP. <em>(I need training. We lack a solid database — I'd love to be trained on CHIP.)</em></p>
+          <div class="quote-meta">— National NTD Programme Manager (non-user)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout green" style="margin-top:20px;">
+      <div class="callout-icon">🚀</div>
+      <div class="callout-text">
+        <strong>Summary conclusion</strong>
+        CHIP is valued highly by those who use it. The primary barriers — stale data and lack of training — are the same for both current users and non-users. Addressing these two issues would likely convert neutral or non-users into advocates, and deepen engagement among existing users. The demand for HMIS integration is near-universal and represents the clearest strategic priority for the product roadmap.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="report-footer">
+  <strong>CHIP Impact Assessment Survey</strong> · 9 respondents · March 2026 · Internal use only
+</div>
+
+<script>
+// ─── CHART DEFAULTS ───
+Chart.defaults.font.family = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#5d6d7e';
+Chart.defaults.plugins.legend.position = 'bottom';
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.padding = 14;
+
+const BLUE  = '#1a6fba';
+const TEAL  = '#17a589';
+const AMBER = '#f39c12';
+const RED   = '#c0392b';
+const PURPLE= '#7d3c98';
+const BLUE2 = '#2e86de';
+const GRAY  = '#bdc3c7';
+
+// ─── A1 ROLE CHART ───
+new Chart(document.getElementById('roleChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['NTD Data Manager/M&E Officer', 'NTD Programme Manager', 'Assistant Technique', 'Data Manager (MoH)', 'Asst. Data Manager'],
+    datasets: [{
+      data: [4, 3, 1, 1, 1],
+      backgroundColor: [BLUE, TEAL, AMBER, PURPLE, RED],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '62%',
+    plugins: { legend: { position: 'right', labels: { font: { size: 11 } } } }
+  }
+});
+
+// ─── A2 YEARS CHART ───
+new Chart(document.getElementById('yearsChart'), {
+  type: 'bar',
+  data: {
+    labels: ['1–3 years', '4–6 years', '7–10 years', '10+ years'],
+    datasets: [{
+      label: 'Respondents',
+      data: [3, 1, 2, 3],
+      backgroundColor: [BLUE2, TEAL, AMBER, BLUE],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, max: 5, ticks: { stepSize: 1 }, grid: { color: '#f0f3f6' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ─── B3 TRAINING CHART ───
+new Chart(document.getElementById('trainingChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Comprehensive training', 'Brief orientation', 'No training received'],
+    datasets: [{
+      data: [2, 2, 2],
+      backgroundColor: [TEAL, AMBER, RED],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '60%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// ─── C1 FREQUENCY CHART ───
+new Chart(document.getElementById('frequencyChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Rarely or never', 'Annually (JAP)', 'Quarterly', 'Weekly'],
+    datasets: [{
+      data: [3, 1, 1, 1],
+      backgroundColor: [RED, AMBER, TEAL, BLUE],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '58%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// ─── IMPACT LIKERT CHART ───
+const impactLabels = [
+  'Easier to access NTD data',
+  'Better understanding of NTD situation',
+  'Helps identify trends',
+  'Informs programme planning',
+  'Identifies priority geographic areas',
+  'Improves stakeholder communication',
+  'Saves time',
+  'Better presentations & reports',
+  'Evidence-based decision-making'
+];
+const impactScores = [4.0, 3.33, 3.67, 3.50, 3.83, 3.83, 3.83, 3.83, 3.50];
+
+new Chart(document.getElementById('impactChart'), {
+  type: 'bar',
+  data: {
+    labels: impactLabels,
+    datasets: [{
+      label: 'Avg score (out of 5)',
+      data: impactScores,
+      backgroundColor: impactScores.map(s => s >= 4 ? TEAL : s >= 3.5 ? BLUE2 : AMBER),
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { min: 1, max: 5, grid: { color: '#f0f3f6' },
+        ticks: { callback: v => ['','SD','D','N','A','SA'][v] || v } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ─── LIKERT TABLE ───
+const likertData = [
+  { label: 'Easier to access NTD data', score: 4.0 },
+  { label: 'Improved understanding of NTD situation', score: 3.33 },
+  { label: 'Visualizations help identify trends', score: 3.67 },
+  { label: 'Data informs programme planning', score: 3.50 },
+  { label: 'Identifies geographic priority areas', score: 3.83 },
+  { label: 'Improves stakeholder communication', score: 3.83 },
+  { label: 'Saves time vs other methods', score: 3.83 },
+  { label: 'Helps prepare better presentations', score: 3.83 },
+  { label: 'WASH model for advocacy', score: 3.17 },
+  { label: 'More evidence-based decisions', score: 3.50 },
+];
+
+const tbody = document.getElementById('likertTableBody');
+likertData.forEach(item => {
+  const pct = ((item.score - 1) / 4) * 100;
+  const color = item.score >= 4 ? '#17a589' : item.score >= 3.5 ? '#2e86de' : item.score >= 3 ? '#f39c12' : '#c0392b';
+  tbody.innerHTML += `
+    <tr>
+      <td>${item.label}</td>
+      <td><strong style="color:${color};">${item.score.toFixed(2)}</strong></td>
+      <td class="score-bar-cell">
+        <div class="score-bar-wrap">
+          <div class="score-track"><div class="score-fill" style="width:${pct}%; background:${color};"></div></div>
+          <span class="score-val" style="color:${color};">${item.score.toFixed(1)}</span>
+        </div>
+      </td>
+    </tr>`;
+});
+
+// ─── DATA QUALITY CHART ───
+new Chart(document.getElementById('qualityChart'), {
+  type: 'bar',
+  data: {
+    labels: [
+      'Visibility motivates reporting',
+      'Motivates better data quality',
+      'Helps identify errors',
+      'Increased programme attention',
+      'Country comparison motivates reporting',
+      'Made corrections after viewing',
+      'Prompted more complete JAP',
+    ],
+    datasets: [{
+      label: 'Avg score (out of 5)',
+      data: [4.17, 4.0, 3.83, 3.50, 3.67, 3.33, 3.33],
+      backgroundColor: [TEAL, TEAL, BLUE2, BLUE2, AMBER, AMBER, AMBER],
+      borderRadius: 5
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { min: 1, max: 5, grid: { color: '#f0f3f6' } },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+// ─── JAP CHANGES CHART ───
+new Chart(document.getElementById('japChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['No changes made', 'Minor changes', 'Significant changes'],
+    datasets: [{
+      data: [3, 2, 1],
+      backgroundColor: [GRAY, AMBER, TEAL],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '60%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// ─── DELAY SIGNIFICANCE CHART ───
+new Chart(document.getElementById('delayChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Major barrier', 'Minor barrier', 'Not aware of delay'],
+    datasets: [{
+      data: [2, 1, 3],
+      backgroundColor: [RED, AMBER, GRAY],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '60%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// ─── OVERALL RATING CHART ───
+new Chart(document.getElementById('overallChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Very valuable', 'Moderately valuable', 'Not valuable'],
+    datasets: [{
+      label: 'Respondents',
+      data: [5, 2, 2],
+      backgroundColor: [TEAL, AMBER, RED],
+      borderRadius: 8
+    }]
+  },
+  options: {
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, max: 7, ticks: { stepSize: 1 }, grid: { color: '#f0f3f6' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ─── RECOMMEND CHART ───
+new Chart(document.getElementById('recommendChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Yes, definitely', 'Neutral'],
+    datasets: [{
+      data: [6, 3],
+      backgroundColor: [TEAL, AMBER],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    cutout: '65%',
+    plugins: { legend: { position: 'bottom' } }
+  }
+});
+
+// ─── SMOOTH SCROLL ───
+document.querySelectorAll('.nav-bar a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
